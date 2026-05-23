@@ -51,60 +51,93 @@ body::after{content:'';position:fixed;bottom:-40px;left:-40px;width:160px;height
 .header h1{font-size:22px;font-weight:700;margin-bottom:4px;text-shadow:0 2px 4px rgba(0,0,0,.15)}
 .header .subtitle{font-size:13px;opacity:.85}
 
-/* ── Points card ── 岛民成就牌 ──────────────── */
+/* ── Points card ── Roblox 成就勋章框 ──────── */
 .points-card{
-  background:#FFFDF5;
-  border:2px solid #E6D5B8;border-radius:24px;
-  padding:28px 20px;margin-bottom:16px;
-  text-align:center;cursor:pointer;
-  transition:transform .25s cubic-bezier(.4,0,.2,1),box-shadow .25s;
-  box-shadow:0 2px 12px rgba(139,110,78,.08);
-  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,rgba(255,253,240,.6),rgba(255,245,220,.4));
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1.5px solid rgba(255,215,0,.25);
+  border-radius:20px;padding:24px 20px;margin-bottom:16px;
+  text-align:center;position:relative;overflow:hidden;
+  box-shadow:0 8px 32px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.5);
 }
+/* 放射状渐变底色 */
 .points-card::before{
-  content:'';position:absolute;top:-30px;right:-30px;
-  width:100px;height:100px;
-  background:radial-gradient(circle,rgba(212,167,58,.08) 0%,transparent 70%);
-  border-radius:50%;pointer-events:none;
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 20%,rgba(255,235,150,.25) 0%,transparent 60%);
+  pointer-events:none;
 }
-.points-card::after{
-  content:'';position:absolute;bottom:-20px;left:-20px;
-  width:80px;height:80px;
-  background:radial-gradient(circle,rgba(123,179,104,.06) 0%,transparent 70%);
-  border-radius:50%;pointer-events:none;
+/* 右上角 Level Up 标签 */
+.points-level-tag{
+  position:absolute;top:12px;right:12px;
+  background:linear-gradient(135deg,#FFD700,#FFA500);
+  color:#fff;font-size:10px;font-weight:800;
+  padding:3px 10px 3px 8px;border-radius:12px;
+  letter-spacing:.5px;
+  box-shadow:0 2px 8px rgba(255,165,0,.3);
+  display:flex;align-items:center;gap:3px;
 }
-.points-card:active{transform:scale(1.05)}
+.points-level-tag::before{content:'⚡';font-size:11px}
 
-.points-star-wrap{
-  font-size:40px;margin-bottom:8px;
-  animation:starFloat 3s ease-in-out infinite;
-  filter:drop-shadow(0 2px 6px rgba(212,167,58,.3));
+/* 发光圆形容器 */
+.points-glow-ring{
+  width:100px;height:100px;border-radius:50%;
+  margin:0 auto 14px;position:relative;
+  display:flex;align-items:center;justify-content:center;
 }
-@keyframes starFloat{
-  0%,100%{transform:translateY(0) scale(1)}
-  50%{transform:translateY(-4px) scale(1.06)}
+/* 外圈光晕 */
+.points-glow-ring::before{
+  content:'';position:absolute;inset:-6px;border-radius:50%;
+  background:conic-gradient(from 0deg,rgba(255,215,0,.4),rgba(255,180,0,.1),rgba(255,215,0,.4),rgba(255,180,0,.1),rgba(255,215,0,.4));
+  animation:ringSpin 6s linear infinite;
+  filter:blur(4px);
+}
+@keyframes ringSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+/* 内圈实底 */
+.points-glow-inner{
+  position:relative;z-index:1;
+  width:92px;height:92px;border-radius:50%;
+  background:linear-gradient(145deg,#FFFCF0,#FFF3D0);
+  border:2px solid rgba(255,215,0,.35);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:0 0 20px rgba(255,215,0,.2),0 0 40px rgba(255,215,0,.08);
 }
 
 .points-num{
-  font-size:56px;font-weight:900;line-height:1;
+  font-size:36px;font-weight:900;line-height:1;
   color:#E6A05E;
   font-family:'Noto Sans SC',system-ui,-apple-system,sans-serif;
-  margin-bottom:10px;
 }
 .points-num.pop{animation:pop .5s ease}
 @keyframes pop{
   0%{transform:scale(1)}
-  30%{transform:scale(1.18)}
-  60%{transform:scale(.96)}
+  30%{transform:scale(1.2)}
+  60%{transform:scale(.95)}
   100%{transform:scale(1)}
 }
+.points-pts-label{font-size:10px;color:#C09050;font-weight:600;margin-top:2px}
 
-.points-label{
-  font-size:12px;color:#B89A78;
-  font-weight:400;letter-spacing:1px;
-  display:flex;align-items:center;justify-content:center;gap:4px;
+/* 进度条 */
+.points-progress{
+  max-width:180px;margin:0 auto;
 }
-.points-label-leaf{font-size:14px}
+.points-progress-bar{
+  height:6px;background:rgba(0,0,0,.06);border-radius:3px;overflow:hidden;
+}
+.points-progress-fill{
+  height:100%;border-radius:3px;
+  background:linear-gradient(90deg,#FFD700,#FFA500);
+  transition:width .8s cubic-bezier(.4,0,.2,1);
+  position:relative;
+}
+.points-progress-fill::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
+  animation:shimmer 2s infinite;
+}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.points-progress-text{
+  font-size:10px;color:#B89A78;margin-top:6px;
+}
 
 /* ── Section ──────────────────────────────────── */
 .section{background:var(--card);border-radius:var(--radius);box-shadow:0 3px 12px var(--shadow);margin-bottom:16px;overflow:hidden}
@@ -225,12 +258,18 @@ body::after{content:'';position:fixed;bottom:-40px;left:-40px;width:160px;height
   </div>
 
   <div class="points-card">
-    <div class="points-star-wrap">🌟</div>
-    <div class="points-num" id="totalPts">0</div>
-    <div class="points-label">
-      <span class="points-label-leaf">🌿</span>
-      当前的努力成果
-      <span class="points-label-leaf">🌿</span>
+    <div class="points-level-tag">Level Up</div>
+    <div class="points-glow-ring">
+      <div class="points-glow-inner">
+        <span class="points-num" id="totalPts">0</span>
+        <span class="points-pts-label">积分</span>
+      </div>
+    </div>
+    <div class="points-progress">
+      <div class="points-progress-bar">
+        <div class="points-progress-fill" id="progressFill" style="width:0%"></div>
+      </div>
+      <div class="points-progress-text" id="progressText">累计进度 0%</div>
     </div>
   </div>
 
@@ -282,7 +321,10 @@ function render() {
   el.textContent = S.total_points;
   if (S.total_points > old && old > 0) { el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); }
 
-  // Today's summary - removed (no longer displaying subtitle)
+  // Progress bar (towards next 100 points)
+  const pct = S.total_points % 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `累计进度 ${pct}%（距下一级 ${100 - pct} 积分）`;
 
   // Tasks
   const wrap = document.getElementById('tasks');

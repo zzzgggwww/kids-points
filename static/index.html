@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>🌽 招铭的小岛</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌽</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌽</text></svg>">
+<meta name="theme-color" content="#5C8A4D">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;600;700;900&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#FFF8EC;--card:#FFFFFF;
+  --green:#5C8A4D;--green-light:#7BB368;--green-dark:#4A7040;
+  --gold:#D4A73A;--gold-light:#F0D68A;
+  --brown:#8B6E4E;--brown-light:#B89A78;
+  --cream:#FFF5E0;--sky:#87CEEB;--pink:#FF9999;
+  --text:#3E2723;--text-light:#8D7B6A;
+  --shadow:rgba(139,110,78,.15);
+  --radius:20px;--radius-sm:14px;
+}
+
+body{
+  font-family:'Noto Sans SC',-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;min-height:100dvh;
+  overflow-x:hidden;-webkit-tap-highlight-color:transparent;
+}
+
+/* ── Decorative bg blobs ──────────────────────── */
+body::before{content:'';position:fixed;top:-60px;right:-60px;width:200px;height:200px;
+  background:radial-gradient(circle,rgba(135,206,235,.25) 0%,transparent 70%);border-radius:50%;pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;bottom:-40px;left:-40px;width:160px;height:160px;
+  background:radial-gradient(circle,rgba(123,179,104,.2) 0%,transparent 70%);border-radius:50%;pointer-events:none;z-index:0}
+
+.app{max-width:480px;margin:0 auto;padding:16px 16px 32px;position:relative;z-index:1}
+
+/* ── Header ───────────────────────────────────── */
+.header{
+  background:linear-gradient(135deg,var(--green),var(--green-light));
+  border-radius:var(--radius);padding:20px 24px;color:#fff;text-align:center;
+  box-shadow:0 6px 20px rgba(92,138,77,.35);margin-bottom:16px;position:relative;overflow:hidden;
+}
+.header::before{content:'🌿';position:absolute;top:8px;left:16px;font-size:20px;opacity:.5}
+.header::after{content:'🌸';position:absolute;bottom:8px;right:16px;font-size:20px;opacity:.5}
+.header h1{font-size:22px;font-weight:700;margin-bottom:4px;text-shadow:0 2px 4px rgba(0,0,0,.15)}
+.header .subtitle{font-size:13px;opacity:.85}
+
+/* ── Points card ── 岛民成就牌 ──────────────── */
+.points-card{
+  background:#FFFDF5;
+  border:2px solid #E6D5B8;border-radius:24px;
+  padding:28px 20px;margin-bottom:16px;
+  text-align:center;cursor:pointer;
+  transition:transform .25s cubic-bezier(.4,0,.2,1),box-shadow .25s;
+  box-shadow:0 2px 12px rgba(139,110,78,.08);
+  position:relative;overflow:hidden;
+}
+.points-card::before{
+  content:'';position:absolute;top:-30px;right:-30px;
+  width:100px;height:100px;
+  background:radial-gradient(circle,rgba(212,167,58,.08) 0%,transparent 70%);
+  border-radius:50%;pointer-events:none;
+}
+.points-card::after{
+  content:'';position:absolute;bottom:-20px;left:-20px;
+  width:80px;height:80px;
+  background:radial-gradient(circle,rgba(123,179,104,.06) 0%,transparent 70%);
+  border-radius:50%;pointer-events:none;
+}
+.points-card:active{transform:scale(1.05)}
+
+.points-star-wrap{
+  font-size:40px;margin-bottom:8px;
+  animation:starFloat 3s ease-in-out infinite;
+  filter:drop-shadow(0 2px 6px rgba(212,167,58,.3));
+}
+@keyframes starFloat{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-4px) scale(1.06)}
+}
+
+.points-num{
+  font-size:56px;font-weight:900;line-height:1;
+  color:#E6A05E;
+  font-family:'Noto Sans SC',system-ui,-apple-system,sans-serif;
+  margin-bottom:10px;
+}
+.points-num.pop{animation:pop .5s ease}
+@keyframes pop{
+  0%{transform:scale(1)}
+  30%{transform:scale(1.18)}
+  60%{transform:scale(.96)}
+  100%{transform:scale(1)}
+}
+
+.points-label{
+  font-size:12px;color:#B89A78;
+  font-weight:400;letter-spacing:1px;
+  display:flex;align-items:center;justify-content:center;gap:4px;
+}
+.points-label-leaf{font-size:14px}
+
+/* ── Section ──────────────────────────────────── */
+.section{background:var(--card);border-radius:var(--radius);box-shadow:0 3px 12px var(--shadow);margin-bottom:16px;overflow:hidden}
+.section-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 8px}
+.section-title{font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px}
+.section-body{padding:4px 20px 20px}
+
+/* ── Task card ────────────────────────────────── */
+.task{
+  background:var(--cream);border-radius:var(--radius-sm);padding:16px;
+  margin-bottom:12px;border:2px solid transparent;
+  transition:border-color .3s,transform .15s;
+}
+.task:last-child{margin-bottom:0}
+.task-row{display:flex;align-items:center;gap:12px}
+.task-emoji{font-size:40px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.12))}
+.task-info{flex:1}
+.task-name{font-size:18px;font-weight:700}
+.task-meta{font-size:12px;color:var(--text-light);margin-top:2px}
+.task-today{font-size:13px;color:var(--green);font-weight:600;margin-top:4px}
+
+/* ── Add button ───────────────────────────────── */
+.btn-add{
+  width:100%;padding:14px 16px;border:none;border-radius:12px;
+  font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;
+  background:linear-gradient(135deg,var(--green-light),var(--green));
+  color:#fff;box-shadow:0 3px 10px rgba(92,138,77,.3);
+  transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;
+  -webkit-tap-highlight-color:transparent;user-select:none;
+  margin-top:12px;
+}
+.btn-add:active{transform:scale(.96);box-shadow:0 1px 4px rgba(92,138,77,.3)}
+
+/* ── Log list ─────────────────────────────────── */
+.log-list{list-style:none}
+.log-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #F0EAE0;font-size:14px}
+.log-item:last-child{border-bottom:none}
+.log-emoji{font-size:22px}
+.log-text{flex:1}
+.log-task{font-weight:600}
+.log-time{font-size:12px;color:var(--text-light);margin-top:2px}
+.log-points{font-weight:700;font-size:15px;color:var(--gold);white-space:nowrap}
+.log-empty{text-align:center;padding:24px;color:var(--text-light);font-size:14px}
+
+/* ── PIN Modal ────────────────────────────────── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(62,39,35,.45);backdrop-filter:blur(4px);
+  display:flex;align-items:flex-end;justify-content:center;z-index:1000;
+  opacity:0;visibility:hidden;transition:all .25s;
+}
+.modal-overlay.show{opacity:1;visibility:visible}
+.modal{
+  background:var(--card);width:100%;max-width:480px;
+  border-radius:var(--radius) var(--radius) 0 0;padding:24px;
+  transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);
+}
+.modal-overlay.show .modal{transform:translateY(0)}
+.modal-title{font-size:18px;font-weight:700;text-align:center;margin-bottom:6px}
+.modal-desc{text-align:center;font-size:13px;color:var(--text-light);margin-bottom:20px}
+.pin-dots{display:flex;gap:10px;justify-content:center;margin-bottom:16px}
+.pin-dot{
+  width:48px;height:48px;border:2.5px solid #D8D0C4;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:700;background:var(--cream);transition:border-color .2s;
+}
+.pin-dot.filled{border-color:var(--green);background:#E8F5E9}
+.pin-dot.error{border-color:#E57373;background:#FFEBEE;animation:pinShake .4s ease}
+@keyframes pinShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.pin-keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.pin-key{
+  padding:16px;border:none;border-radius:12px;font-size:22px;font-weight:700;
+  font-family:inherit;background:var(--cream);cursor:pointer;
+  transition:background .1s,transform .1s;-webkit-tap-highlight-color:transparent;user-select:none;
+}
+.pin-key:active{background:#E8E0D4;transform:scale(.95)}
+.pin-key.special{background:transparent;font-size:16px}
+.pin-key.delete{color:#E57373}
+
+/* ── Toast ─────────────────────────────────────── */
+.toast{
+  position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);
+  background:var(--card);padding:14px 24px;border-radius:16px;
+  box-shadow:0 8px 30px rgba(0,0,0,.18);font-size:15px;font-weight:600;
+  z-index:2000;transition:transform .4s cubic-bezier(.4,0,.2,1);white-space:nowrap;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ── Confetti ─────────────────────────────────── */
+.confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:1500;overflow:hidden}
+.confetti{position:absolute;border-radius:2px;animation:confettiFall 1.5s ease-out forwards}
+@keyframes confettiFall{
+  0%{transform:translateY(-20px) rotate(0deg) scale(1);opacity:1}
+  100%{transform:translateY(100vh) rotate(720deg) scale(.3);opacity:0}
+}
+
+/* ── Responsive ───────────────────────────────── */
+@media(max-width:360px){
+  .app{padding:12px 12px 24px}
+  .header{padding:16px 20px}
+  .header h1{font-size:19px}
+  .points-emoji{font-size:38px}
+  .points-big{font-size:44px}
+  .points-star{font-size:20px}
+  .task-emoji{font-size:32px}
+}
+@media(min-width:481px){
+  .app{padding:24px 24px 40px}
+  .pin-dot{width:52px;height:52px}
+}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+  <div class="header">
+    <h1 id="title">🌽 招铭的小岛</h1>
+    <div class="subtitle" id="date"></div>
+  </div>
+
+  <div class="points-card">
+    <div class="points-star-wrap">🌟</div>
+    <div class="points-num" id="totalPts">0</div>
+    <div class="points-label">
+      <span class="points-label-leaf">🌿</span>
+      当前的努力成果
+      <span class="points-label-leaf">🌿</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-title">📋 今日任务</div></div>
+    <div class="section-body" id="tasks"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-title">📜 最近记录</div></div>
+    <div class="section-body"><ul class="log-list" id="logs"></ul></div>
+  </div>
+</div>
+
+<!-- PIN Modal -->
+<div class="modal-overlay" id="pinModal">
+  <div class="modal">
+    <div class="modal-title">🔒 大人验证</div>
+    <div class="modal-desc" id="pinDesc">请输入 PIN 码</div>
+    <div class="pin-dots" id="pinDots"></div>
+    <div class="pin-keypad" id="pinKeypad"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="confetti-wrap" id="confettiWrap"></div>
+
+<script>
+let S = { kid_name:'', total_points:0, tasks:[], recent_logs:[] };
+let pin = '';
+let pendingId = null;
+
+/* ── Fetch ──────────────────────────────────── */
+async function load() {
+  try { S = await (await fetch('/api/summary')).json(); render(); }
+  catch(e) { console.error(e); }
+}
+
+/* ── Render ─────────────────────────────────── */
+function render() {
+  document.getElementById('title').textContent = `🌽 ${S.kid_name}的小岛`;
+  const d = new Date();
+  const wk = ['日','一','二','三','四','五','六'];
+  document.getElementById('date').textContent = `${d.getMonth()+1}月${d.getDate()}日 星期${wk[d.getDay()]}`;
+
+  // Points
+  const el = document.getElementById('totalPts');
+  const old = parseInt(el.textContent) || 0;
+  el.textContent = S.total_points;
+  if (S.total_points > old && old > 0) { el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); }
+
+  // Today's summary - removed (no longer displaying subtitle)
+
+  // Tasks
+  const wrap = document.getElementById('tasks');
+  if (!S.tasks.length) { wrap.innerHTML = '<div class="log-empty">还没有任务哦~</div>'; return; }
+  wrap.innerHTML = S.tasks.map(t => {
+    const done = t.done_today >= 1;
+    return `
+    <div class="task" style="${done ? 'opacity:0.7' : ''}">
+      <div class="task-row">
+        <span class="task-emoji">${t.emoji}</span>
+        <div class="task-info">
+          <div class="task-name">${t.name}</div>
+          <div class="task-meta">每次 +${t.points} ⭐</div>
+        </div>
+      </div>
+      ${done
+        ? '<div style="text-align:center;margin-top:12px;padding:12px;background:#E8F5E9;border-radius:12px;font-weight:700;color:#5C8A4D;font-size:16px">✅ 今日已完成</div>'
+        : `<button class="btn-add" onclick="onAdd(${t.id},'${t.name} ${t.emoji}')">完成任务 +${t.points}⭐</button>`
+      }
+    </div>
+  `}).join('');
+
+  // Logs
+  const logList = document.getElementById('logs');
+  if (!S.recent_logs.length) { logList.innerHTML = '<div class="log-empty">还没有记录哦~</div>'; return; }
+  logList.innerHTML = S.recent_logs.map(l => `
+    <li class="log-item">
+      <span class="log-emoji">${l.emoji}</span>
+      <div class="log-text">
+        <div class="log-task">${l.note || l.task_name}</div>
+        <div class="log-time">${fmtTime(l.created_at)}</div>
+      </div>
+      <span class="log-points">+${l.delta}⭐</span>
+    </li>
+  `).join('');
+}
+
+function fmtTime(ts) {
+  if (!ts) return '';
+  const d = new Date(ts.replace(' ','T'));
+  const t = d.toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});
+  return ts.slice(0,10) === new Date().toISOString().slice(0,10) ? `今天 ${t}` : `${d.getMonth()+1}/${d.getDate()} ${t}`;
+}
+
+/* ── Add ────────────────────────────────────── */
+function onAdd(id, name) {
+  pendingId = id;
+  pin = '';
+  document.getElementById('pinDesc').textContent = `验证后记录：${name}`;
+  renderDots();
+  document.getElementById('pinModal').classList.add('show');
+}
+function closeModal() {
+  document.getElementById('pinModal').classList.remove('show');
+  pin = ''; pendingId = null;
+}
+
+/* ── PIN Keypad ─────────────────────────────── */
+function initKeypad() {
+  const keys = ['1','2','3','4','5','6','7','8','9','','0','⌫'];
+  document.getElementById('pinKeypad').innerHTML = keys.map(k => {
+    if (k === '') return '<div></div>';
+    if (k === '⌫') return '<button class="pin-key delete" onclick="onKey(\'del\')">⌫</button>';
+    return `<button class="pin-key" onclick="onKey('${k}')">${k}</button>`;
+  }).join('');
+}
+function renderDots() {
+  document.getElementById('pinDots').innerHTML = Array.from({length:6},(_, i) =>
+    `<div class="pin-dot ${i < pin.length ? 'filled' : ''}">${i < pin.length ? '●' : ''}</div>`
+  ).join('');
+}
+function onKey(k) {
+  if (k === 'del') pin = pin.slice(0,-1);
+  else if (pin.length < 6) pin += k;
+  renderDots();
+  if (pin.length === 6) submit();
+}
+async function submit() {
+  if (!pendingId) return;
+  try {
+    const r = await fetch(`/api/tasks/${pendingId}/add`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({pin})
+    });
+    if (r.status === 403) {
+      document.querySelectorAll('.pin-dot').forEach(d => d.classList.add('error'));
+      setTimeout(() => { pin=''; renderDots(); }, 600);
+      showToast('❌ PIN 有误');
+      return;
+    }
+    if (r.status === 409) {
+      closeModal();
+      showToast('✅ 今日已完成');
+      load();
+      return;
+    }
+    const d = await r.json();
+    closeModal();
+    showToast(`🎉 +${d.points_earned}⭐`);
+    showConfetti();
+    load();
+  } catch(e) { showToast('⚠️ 网络错误'); }
+}
+
+/* ── Toast ──────────────────────────────────── */
+function showToast(m) {
+  const el = document.getElementById('toast');
+  el.textContent = m; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+/* ── Confetti ───────────────────────────────── */
+function showConfetti() {
+  const w = document.getElementById('confettiWrap');
+  const colors = ['#5C8A4D','#D4A73A','#FF9999','#87CEEB','#FFD700','#FF6B6B','#48BB78'];
+  for (let i = 0; i < 40; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.cssText = `left:${Math.random()*100}%;top:-10px;background:${colors[i%colors.length]};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;animation-delay:${Math.random()*.6}s;animation-duration:${1+Math.random()}s`;
+    w.appendChild(c);
+  }
+  setTimeout(() => { w.innerHTML = ''; }, 2500);
+}
+
+/* ── Close modal on backdrop click ──────────── */
+document.getElementById('pinModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+/* ── Init ───────────────────────────────────── */
+initKeypad();
+load();
+setInterval(load, 30000);
+</script>
+</body>
+</html>

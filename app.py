@@ -76,10 +76,15 @@ def init_db():
         """)
         # 首次启动插入默认任务
         if db.execute("SELECT count(*) FROM tasks").fetchone()[0] == 0:
-            db.execute(
-                "INSERT INTO tasks (name, emoji, points, sort_order) VALUES (?,?,?,?)",
+            defaults = [
                 ("吃菜 10 条", "🥬", 1, 0),
-            )
+                ("睡午觉", "😴", 1, 1),
+            ]
+            for name, emoji, pts, order in defaults:
+                db.execute(
+                    "INSERT INTO tasks (name, emoji, points, sort_order) VALUES (?,?,?,?)",
+                    (name, emoji, pts, order),
+                )
 
 
 # ── 请求模型 ──────────────────────────────────────
